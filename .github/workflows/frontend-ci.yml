@@ -81,10 +81,7 @@ jobs:
 
       - name: Build the application using Docker
         run: |
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 039003090067.dkr.ecr.us-east-1.amazonaws.com
+          echo $AWS_ACCESS_KEY_ID | docker login --username AWS --password-stdin 039003090067.dkr.ecr.us-east-1.amazonaws.com
           docker build -t frontend .
           docker tag frontend:latest 039003090067.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
           docker push 039003090067.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
-
-
-
