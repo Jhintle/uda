@@ -1,89 +1,102 @@
 name: Frontend Continuous Integration
 
-# Triggers (manual & auto)
 on:
+  # This allows running on-demand
   workflow_dispatch:
   pull_request:
     branches:
-      - master
-
+      - main
+    paths:
+      # This will only run on changes to the frontend code
+      - "starter/frontend/**"
 env:
-  NODE_VERSION: 18
-  AWS_REGION: us-east-1
-  ECR_REPO: movie-picture-frontend-repo
-  REACT_API_URL: http://localhost:5000  #update this
+  NODE_VERSION: 18.x
 
 jobs:
-  Frontend-Lint:
+
+  lint:
+    name: Frontend Linting
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./starter/frontend
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-      # set up node.js environment
-      - name: Node.js environment setup
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      # Restore cache && Install dependencies
-      - name: Cache restore
-        uses: ylemkimon/cache-restore@v2
+        uses: actions/checkout@v3
+
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: npm-${{ hashFiles('starter/frontend/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            npm-
+
       - name: Install dependencies
-        run: cd frontend && npm ci
-      # Run the linter
-      - name: Linting
-        run: cd frontend && npm run lint
-  Frontend-Test:
+        run: |
+          npm install
+
+      - name: Run ESLint
+        run: |
+          npm run lint -- --fix
+
+  test:
+    name: Frontend Testing
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./starter/frontend
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-      # set up node.js environment
-      - name: Node.js environment setup
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      # Restore cache && Install dependencies
-      - name: Cache restore
-        uses: ylemkimon/cache-restore@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+        uses: actions/checkout@v3
       - name: Install dependencies
-        run: cd frontend && npm ci
-      # Run the tests
-      - name: Testing
-        run: cd frontend && npm run test
-  Frontend-Build:
-    needs: [Frontend-Lint, Frontend-Test]
+        run: |
+          npm install -f
+      - name: Run tests
+        run: |
+          npm run test
+  build:
+    name: Build & Push Docker image
     runs-on: ubuntu-latest
+    needs: [lint, test]
+    defaults:
+      run:
+        working-directory: ./starter/frontend
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-      # Configure AWS credentials
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          # aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{ env.AWS_REGION }}
-      # AWS ECR Login
+          aws-region: us-east-1
+
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-      - name: Build, tag, and push docker image to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: "true"
+
+      - name: Build, Tag, and Push docker image
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{ env.ECR_REPO }}
-          IMAGE_TAG: ${{ github.sha }}
+          REPOSITORY: frontend
+          IMAGE_TAG: latest
         run: |
-          docker build --build-arg REACT_APP_MOVIE_API_URL=${{ env.REACT_API_URL }} -t $REGISTRY/$REPOSITORY:$IMAGE_TAG ./frontend
-        # error handling
-        if: success()
+          aws eks update-kubeconfig --name cluster
+          export EXTERNALIP=$(kubectl get svc backend -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}{"\n"}{.status.loadBalancer.ingress[0].ip}')
+          echo $EXTERNALIP
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG --build-arg=REACT_APP_MOVIE_API_URL=http://$EXTERNALIP .
+          docker images
+
+      - name: Cache Docker image
+        uses: actions/cache@v3
+        with:
+          path: ~/docker-cache
+          key: docker-${{ github.sha }}-frontend
