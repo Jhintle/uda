@@ -11,8 +11,8 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REPO: movie-picture-backend-repo
-  EKS_CLUSTER_NAME: movie-picture-backend-cluster
+  ECR_REPO: backend
+  EKS_CLUSTER_NAME: cluster
   PYTHON_VERSION: "3.9"
   KUBECTL_VERSION: "v1.28.0"    # same version as k8 on EKS
 
