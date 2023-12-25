@@ -12,30 +12,29 @@ defaults:
 
 jobs:
   lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checking Out the code from Repo
-        uses: actions/checkout@v3
+  name: Lint
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checking Out the code from Repo
+      uses: actions/checkout@v3
 
-      - name: Setting up NodeJS
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.16.0
+    - name: Setting up NodeJS
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.16.0
 
-      - name: Cache before dependency install
-        id: CachingData
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: deps-node-modules-${{ runner.os }}-${{ hashFiles('starter/frontend/**/package-lock.json') }}
-        
-      - name: Installing dependencies
-        run: npm ci
+    - name: Cache before dependency install
+      id: CachingData
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: deps-node-modules-${{ runner.os }}-${{ hashFiles('starter/frontend/**/package-lock.json') }}
+      
+    - name: Installing dependencies
+      run: npm ci
 
-      - name: Now Running Lint
-        run: npm run lint
-
+    - name: Linting
+      run: npm run lint
   test:
     name: Test
     runs-on: ubuntu-latest
