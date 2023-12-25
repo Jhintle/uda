@@ -141,10 +141,10 @@ jobs:
           REPOSITORY: frontend
           IMAGE_TAG: latest
         run: |
-          customize edit set image frontend=$REGISTRY/$REPOSITORY:$IMAGE_TAG
+          kustomize edit set image frontend=$REGISTRY/$REPOSITORY:$IMAGE_TAG
         working-directory: ./starter/frontend/k8s
 
       - name: Apply Kubernetes resources
         run: |
-          customize build | kubectl apply -f -
+          kustomize build | kubectl apply -f -
         working-directory: ./starter/frontend/k8s
