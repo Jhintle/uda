@@ -16,9 +16,6 @@
   "jest": {
     "testMatch": ["**/__tests__/**/*.{js,jsx,ts,tsx}", "**/*.{spec,test}.{js,jsx,ts,tsx}"],
     "testPathIgnorePatterns": ["/node_modules/"]
-
-  "scripts": {
-    "test": "react-scripts test --transformIgnorePatterns --passWithNoTests",
   },
   "scripts": {
     "serve": "serve -s build",
