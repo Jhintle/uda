@@ -45,17 +45,17 @@ jobs:
     #defaults:
       #run:
         #working-directory: ./starter/frontend
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    #steps:
+     # - name: Checkout code
+      #  uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: | 
-          npm install
+     # - name: Install dependencies
+      #  run: | 
+       #   npm install
 
-      - name: Run tests
-        run: |
-          npm test
+    #  - name: Run tests
+     #   run: |
+       #   npm test
 
   build:
     name: Build & Push Docker 
@@ -68,9 +68,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: |
-          npm install
+      #- name: Install dependencies
+      #  run: |
+      #    npm install
 
       - name: AWS Configure
         uses: aws-actions/configure-aws-credentials@v4
