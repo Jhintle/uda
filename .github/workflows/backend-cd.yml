@@ -1,13 +1,13 @@
-name: Backend Continuous Deployment
+name: Backend CD
 
 on:
-  # This allows running on-demand
+  
   workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      # This will only run on changes to the backend code
+
       - 'starter/backend/**'
 
 env:
@@ -107,7 +107,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Login to Amazon ECR
+      - name: ECR Login
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
@@ -162,7 +162,7 @@ jobs:
         run: ./init.sh || true
         working-directory: ./setup
 
-      - name: Set Docker image in Kustomize
+      - name: Set Docker image in customize
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: backend
