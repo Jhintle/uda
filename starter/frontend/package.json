@@ -14,12 +14,12 @@
     "web-vitals": "^2.1.4"
   },
   "jest": {
-    "testMatch": ["**/__tests__/**/*.{js,jsx,ts,tsx}", "**/*.{spec,test}.{js,jsx,ts,tsx}"],
-    "testPathIgnorePatterns": ["/node_modules/"]
+    "testMatch": ["**/__tests__/**/*.{js,jsx,ts,tsx}", "**/*.{spec,test}.{js,jsx,ts,tsx}"]
+    // Remove "testPathIgnorePatterns" as it is not supported by Create React App
   },
   "scripts": {
     "serve": "serve -s build",
-    "lint": "eslint .",
+    "lint": "eslint . --fix", // Add --fix to automatically fix linting issues
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns",
