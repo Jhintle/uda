@@ -19,7 +19,7 @@
   },
  "scripts": {
   "serve": "serve -s build",
-  "lint": "eslint . --fix",  // This is the corrected line
+  "lint": "eslint . --fix",  
   "start": "react-scripts start",
   "build": "react-scripts build",
   "test": "react-scripts test --transformIgnorePatterns",
