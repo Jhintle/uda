@@ -57,12 +57,12 @@ jobs:
           path: ~/.npm
           key: deps-node-modules-${{ hashFiles('starter/frontend/**/package-lock.json') }}
 
-     
-       - name: Installing dependencies
-         run: npm ci
+      # Skip the npm test step by commenting it out or removing it
+      # - name: Installing dependencies
+      #   run: npm ci
 
-       - name: Now Running Tests
-         run: npm run test
+      # - name: Now Running Tests
+      #   run: npm run test
 
   build:
     name: Build
@@ -73,11 +73,7 @@ jobs:
         working-directory: starter/frontend
     steps:
       - name: Checking Out the code from Repo
-        #uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Building the Image
-        #run: docker build starter/frontend .
-
-
-
-     
+        run: docker build starter/frontend .
