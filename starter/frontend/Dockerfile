@@ -12,7 +12,7 @@ COPY package*.json ./
 RUN npm ci
 
 # Set NODE_PATH
-ENV NODE_PATH=/app/src
+#ENV NODE_PATH=/app/src
 
 # Copy code
 COPY . .
