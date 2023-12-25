@@ -1,13 +1,13 @@
-name: Backend Continuous Integration
+name: Backend CI
 
 on:
-  # This allows running on-demand
+  
   workflow_dispatch:
   pull_request:
     branches:
       - main
     paths:
-      # This will only run on changes to the backend code
+      
       - "starter/backend/**"
 
 env:
@@ -100,14 +100,14 @@ jobs:
         run: |
           pipenv install
 
-      - name: Configure AWS Credentials
+      - name: AWS configure
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Login to Amazon ECR
+      - name: Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
