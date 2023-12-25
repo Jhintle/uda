@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install packages
-RUN npm ci
+#RUN npm ci
 
 # Set NODE_PATH
 ENV NODE_PATH=/app/src
@@ -18,7 +18,7 @@ ENV NODE_PATH=/app/src
 COPY . .
 
 # Build the app
-RUN npm run build
+#RUN npm run build
 
 # Expose the port used by the React app
 EXPOSE 3000
