@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: frontend
+        working-directory: ./starter/frontend
     steps:
       - name: Checking Out the code from Repo
         uses: actions/checkout@v3
