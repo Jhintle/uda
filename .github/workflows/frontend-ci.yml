@@ -57,11 +57,11 @@ jobs:
           path: ~/.npm
           key: deps-node-modules-${{ hashFiles('starter/frontend/**/package-lock.json') }}
 
-      # Skip the npm test step by commenting it out or removing it
-      # - name: Installing dependencies
-      #   run: npm ci
-      # - name: Now Running Tests
-      #   run: npm run test
+      
+       - name: Installing dependencies
+         run: npm ci
+       - name: Now Running Tests
+         run: npm run test
 
   build:
     name: Build
