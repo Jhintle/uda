@@ -14,17 +14,16 @@
     "web-vitals": "^2.1.4"
   },
   "jest": {
-    "testMatch": ["**/__tests__/**/*.{js,jsx,ts,tsx}", "**/*.{spec,test}.{js,jsx,ts,tsx}"],
-    "testPathIgnorePatterns": ["/node_modules/"]
+    "testMatch": ["**/__tests__/**/*.{js,jsx,ts,tsx}", "**/*.{spec,test}.{js,jsx,ts,tsx}"]
   },
- "scripts": {
-  "serve": "serve -s build",
-  "lint": "eslint . --fix",  
-  "start": "react-scripts start",
-  "build": "react-scripts build",
-  "test": "react-scripts test --transformIgnorePatterns",
-  "clean": "rm -rf ./node_modules && rm -rf ./build"
-},
+  "scripts": {
+    "serve": "serve -s build",
+    "lint": "eslint . --fix",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --transformIgnorePatterns",
+    "clean": "rm -rf ./node_modules && rm -rf ./build"
+  },
   "eslintConfig": {
     "extends": ["react-app", "react-app/jest"]
   },
